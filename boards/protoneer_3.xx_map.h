@@ -19,7 +19,7 @@
   along with grblHAL. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#if N_AUTO_SQUARED || N_ABC_MOTORS > 1
+#if N_ABC_MOTORS > 3
 #error "Axis configuration is not supported!"
 #endif
 
@@ -27,7 +27,7 @@
 #error "Trinamic plugin not supported!"
 #endif
 
-#define BOARD_NAME "Protoneer v3"
+#define BOARD_NAME "Protoneer v3 dtech"
 #define BOARD_URL "https://blog.protoneer.co.nz/arduino-cnc-shield/"
 
 #undef PROBE_ENABLE
@@ -40,6 +40,25 @@
 
 #if ETHERNET_ENABLE
 #define SPI_PORT                2 // GPIOB, SCK_PIN = 13, MISO_PIN = 14, MOSI_PIN = 15
+#endif
+
+// input output mesin milling
+#define HAS_IOPORTS
+#if HYDRAULIC_ENABLE // aktifkan di platformio.ini
+#define AUXOUTPUT0_PORT GPIOB
+#define AUXOUTPUT0_PIN 15 // hydraulic
+#else
+#define AUXOUTPUT0_PORT GPIOC
+#define AUXOUTPUT0_PIN 5 // atc A
+#endif
+#ifdef HAS_IOPORTS
+#define AUXOUTPUT1_PORT GPIOC
+#define AUXOUTPUT1_PIN 12 // relase error
+
+#define AUXINPUT0_PORT GPIOA
+#define AUXINPUT0_PIN 11 // untuk input vfd error
+#define AUXINPUT1_PORT GPIOA
+#define AUXINPUT1_PIN 12 // untuk input motor warning
 #endif
 
 #if SPINDLE_ENABLE & (1 << SPINDLE_PWM0)
@@ -80,7 +99,7 @@
 #define Y_LIMIT_PORT            GPIOB // D10
 #define Y_LIMIT_PIN             6
 #define Z_LIMIT_PORT            GPIOA // D11
-#define Z_LIMIT_PIN             7
+#define Z_LIMIT_PIN             7 //di firmware se
 #define LIMIT_INMODE            GPIO_BITBAND
 #define Z_LIMIT_POLL
 
@@ -128,7 +147,7 @@
 #define SPINDLE_PWM_PORT_BASE   GPIOA_BASE
 #define SPINDLE_PWM_PIN         11
 #define SPINDLE_INDEX_PORT      GPIOC
-#define SPINDLE_INDEX_PIN       11
+#define SPINDLE_INDEX_PIN       9
 #define SPINDLE_PULSE_PORT      GPIOD
 #define SPINDLE_PULSE_PIN       2
 #endif
